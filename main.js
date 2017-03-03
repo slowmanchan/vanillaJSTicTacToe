@@ -12,18 +12,16 @@ window.onload = function() {
       player2: []
     }
   }
-  var gameTitle = document.createElement('h1');
-  gameTitle.style.textAlign = 'center';
-  gameTitle.innerHTML = 'Vanilla JS TTT';
-  var board = document.createElement('div');
-  board.style.boxSizing = 'border-box';
 
-  board.id = 'board';
-  board.style.width = '200px';
-  board.style.height = '200px';
-  board.style.margin = 'auto';
+  function gameTitle() {
+    var gameTitle = document.createElement('h1');
+    gameTitle.style.textAlign = 'center';
+    gameTitle.innerHTML = 'T3 Vanilla JS';
 
-  for (var i = 1; i < 10; i++) {
+    return gameTitle;
+  }
+
+  function cell(i) {
     var cell = document.createElement('div');
 
     cell.style.float = 'left';
@@ -33,12 +31,27 @@ window.onload = function() {
     cell.style.borderColor = 'black';
     cell.style.fontSize = '3em';
     cell.style.textAlign = 'center';
-
     cell.id = 'cell' + i;
-    board.append(cell);
+
+    return cell;
   }
 
-  board.addEventListener('click', addPiece);
+  function board(addPiece) {
+    var board = document.createElement('div');
+
+    board.style.boxSizing = 'border-box';
+    board.id = 'board';
+    board.style.width = '200px';
+    board.style.height = '200px';
+    board.style.margin = 'auto';
+
+    board.addEventListener('click', addPiece);
+
+    for (var i = 1; i < 10; i++) {
+      board.append(cell(i));
+    }
+    return board;
+  }
 
   function addPiece(e) {
     if (!e.target.innerHTML) {
@@ -47,12 +60,10 @@ window.onload = function() {
         gameState.moves.player1.push(Number(e.target.id.slice(-1)));
         checkWin();
         gameState.turn = 'player2';
-
       } else {
         e.target.innerHTML = 'O';
         gameState.moves.player2.push(Number(e.target.id.slice(-1)));
         checkWin();
-
         gameState.turn = 'player1';
       }
     }
@@ -66,12 +77,17 @@ window.onload = function() {
           winningMoves.push('W');
         }
         if (winningMoves.length == 3) {
-          alert('winner ' + gameState.turn);
+          alert('WINNER ' + gameState.turn);
         }
       }
     }
   }
 
-  root.append(gameTitle);
-  root.append(board);
+  function init() {
+    root.style.fontFamily = 'Arial';
+    root.append(gameTitle());
+    root.append(board(addPiece));
+  }
+
+  init()
 }
